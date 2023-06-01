@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS incomes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member VARCHAR(50) NOT NULL,
+    comments VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS outgoings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member VARCHAR(50) NOT NULL,
+    comments VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL
+);
