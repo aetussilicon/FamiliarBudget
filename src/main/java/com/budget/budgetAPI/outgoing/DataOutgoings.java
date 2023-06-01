@@ -1,10 +1,10 @@
-package com.budget.budgetAPI.income;
+package com.budget.budgetAPI.outgoing;
 
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-public record DataIncomes(
+public record DataOutgoings(
 
         @NotBlank
         String member,
