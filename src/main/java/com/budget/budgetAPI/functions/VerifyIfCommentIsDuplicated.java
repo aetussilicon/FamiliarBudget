@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+//Métodos para verificar se um comentário está duplicado.
 @Component
 public class VerifyIfCommentIsDuplicated {
 

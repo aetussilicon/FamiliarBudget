@@ -4,7 +4,8 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-public record DataIncomes(
+//DTO para registro de receitas.
+public record DataRegisterIncomes(
 
         @NotBlank
         String member,

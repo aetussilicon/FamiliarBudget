@@ -24,7 +24,7 @@ public class Income {
     private String comments;
 
 
-    public Income(DataIncomes data) {
+    public Income(DataRegisterIncomes data) {
         this.member = data.member();
         this.date = data.date();
         this.price = data.price();
