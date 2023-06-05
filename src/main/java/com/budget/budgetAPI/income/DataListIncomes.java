@@ -9,7 +9,7 @@ public record DataListIncomes(
         BigDecimal price,
         String date) {
 
-    public DataListIncomes(Income income){
+    public DataListIncomes(Income income) {
         this(income.getMember(), income.getComments(), income.getPrice(), income.getDate());
     }
 }

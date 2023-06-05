@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Table(name = "incomes")
@@ -16,7 +17,8 @@ import java.math.BigDecimal;
 public class Income {
 
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String member;
     private String date;
@@ -29,5 +31,27 @@ public class Income {
         this.date = data.date();
         this.price = data.price();
         this.comments = data.comments();
+    }
+
+    public Income(UpdateIncomeData data) {
+    }
+
+    public void updateData(UpdateIncomeData data) {
+        if (data.member() != null) {
+            this.member = data.member();
+        }
+
+        if (data.date() != null) {
+            this.date = data.date();
+        }
+
+        if (data.price() != null) {
+            this.price = data.price();
+        }
+
+        if (data.comments() != null) {
+            this.comments = data.comments();
+        }
+
     }
 }
