@@ -29,4 +29,22 @@ public class Outgoing {
         this.price = data.price();
         this.comments = data.comments();
     }
+
+    public void updateData(UpdateOutgoingData data) {
+        if (data.member() != null) {
+            this.member = data.member();
+        }
+
+        if (data.date() != null) {
+            this.date = data.date();
+        }
+
+        if (data.price() != null) {
+            this.price = data.price();
+        }
+
+        if (data.comments() != null) {
+            this.comments = data.comments();
+        }
+    }
 }

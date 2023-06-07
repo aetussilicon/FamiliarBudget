@@ -1,5 +1,6 @@
 package com.budget.budgetAPI.controller;
 
+import com.budget.budgetAPI.exceptions.DuplicatedCommentException;
 import com.budget.budgetAPI.functions.VerifyIfCommentIsDuplicated;
 import com.budget.budgetAPI.income.*;
 import jakarta.validation.Valid;
@@ -25,13 +26,15 @@ public class IncomesController {
     String date;
 
     public IncomesController(IncomeRepository repository, VerifyIfCommentIsDuplicated verifyIfCommentIsDuplicated) {
-        //this.repository = repository;
         this.verifyIfCommentIsDuplicated = verifyIfCommentIsDuplicated;
     }
 
     //Método para registro de receitas.
     @PostMapping
-    public void registerIncomes(@RequestBody @Valid DataRegisterIncomes data) {
+    public void registerIncomes(@RequestBody @Valid DataRegisterIncomes data) throws IllegalArgumentException {
+
+        comments = data.comments();
+        date = data.date();
 
         /*Método que verifica se um comentário está duplicado em um mesmmo mês,
         dentro do database, se estiver, lança uma exception, se não, registra.
@@ -62,7 +65,7 @@ public class IncomesController {
     //Atualiza uma informção dentro do banco de dados das receitas
     @PutMapping
     @Transactional
-    public void updateIncomes(@RequestBody @Valid UpdateIncomeData data) {
+    public void updateIncomes(@RequestBody @Valid UpdateIncomeData data) throws IllegalArgumentException {
         Long id = data.id();
         Optional<Income> optionalIncome = Optional.of(repository.getReferenceById(id));
         if (optionalIncome.isPresent()) {

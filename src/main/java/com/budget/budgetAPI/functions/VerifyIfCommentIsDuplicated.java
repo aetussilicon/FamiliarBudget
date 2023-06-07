@@ -20,11 +20,6 @@ public class VerifyIfCommentIsDuplicated {
     @Autowired
     private OutgoingsRepository outgoingsRepository;
 
-    public <T> boolean verifyIfIsDuplicate(String comments, String date, CrudRepository<T, Long> repository){
-        Optional<T> entity = repository.findByCommentAndDate(comments, date);
-        return entity.isPresent();
-    }
-
     public boolean verifyIfIsDuplicateIncome(String comments, String date) {
         Optional<Income> income = repository.findByCommentAndDate(comments, date);
         return income.isPresent();
