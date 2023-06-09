@@ -4,6 +4,7 @@ import com.budget.budgetAPI.income.Income;
 import com.budget.budgetAPI.income.IncomeRepository;
 import com.budget.budgetAPI.outgoing.Outgoing;
 import com.budget.budgetAPI.outgoing.OutgoingsRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.aop.scope.ScopedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -13,11 +14,10 @@ import java.util.Optional;
 
 //Métodos para verificar se um comentário está duplicado.
 @Component
+@AllArgsConstructor
 public class VerifyIfCommentIsDuplicated {
 
-    @Autowired
     private IncomeRepository repository;
-    @Autowired
     private OutgoingsRepository outgoingsRepository;
 
     public boolean verifyIfIsDuplicateIncome(String comments, String date) {
@@ -28,5 +28,4 @@ public class VerifyIfCommentIsDuplicated {
         Optional<Outgoing> outgoing = outgoingsRepository.findByCommentAndDate(comments, date);
         return outgoing.isPresent();
     }
-
 }

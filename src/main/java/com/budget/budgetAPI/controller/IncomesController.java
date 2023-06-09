@@ -31,7 +31,7 @@ public class IncomesController {
 
     //Método para registro de receitas.
     @PostMapping
-    public void registerIncomes(@RequestBody @Valid DataRegisterIncomes data) throws IllegalArgumentException {
+    public void registerIncomes(@RequestBody @Valid DataRegisterIncomes data) throws DuplicatedCommentException {
 
         comments = data.comments();
         date = data.date();
@@ -39,8 +39,8 @@ public class IncomesController {
         /*Método que verifica se um comentário está duplicado em um mesmmo mês,
         dentro do database, se estiver, lança uma exception, se não, registra.
         */
-        if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date) == true) {
-            throw new IllegalArgumentException("Comentário duplicado");
+        if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date)) {
+            throw new DuplicatedCommentException();
         }
         repository.save(new Income(data));
     }
@@ -65,21 +65,17 @@ public class IncomesController {
     //Atualiza uma informção dentro do banco de dados das receitas
     @PutMapping
     @Transactional
-    public void updateIncomes(@RequestBody @Valid UpdateIncomeData data) throws IllegalArgumentException {
-        Long id = data.id();
-        Optional<Income> optionalIncome = Optional.of(repository.getReferenceById(id));
-        if (optionalIncome.isPresent()) {
-            income = optionalIncome.get();
-            {
-                comments = data.comments();
-                date = data.date();
+    public void updateIncomes(@RequestBody @Valid UpdateIncomeData data) throws DuplicatedCommentException {
 
-                if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date) &&
-                        !comments.equals(income.getComments())) {
-                    throw new IllegalArgumentException("Comentário duplicado");
-                }
-                income.updateData(data);
-            }
+        income = repository.getReferenceById(data.id());
+        comments = data.comments();
+        date = data.date();
+
+        if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date)) {
+            throw new DuplicatedCommentException();
         }
+        income.updateData(data);
     }
+
 }
+

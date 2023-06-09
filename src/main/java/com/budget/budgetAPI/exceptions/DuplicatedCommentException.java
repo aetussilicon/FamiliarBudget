@@ -1,6 +1,9 @@
 package com.budget.budgetAPI.exceptions;
 
 public class DuplicatedCommentException extends Throwable {
-    public DuplicatedCommentException(String comentárioDuplicado) {
+
+    private static final String msg = "Comentário duplicado";
+    public DuplicatedCommentException(){
+        super(msg);
     }
 }
