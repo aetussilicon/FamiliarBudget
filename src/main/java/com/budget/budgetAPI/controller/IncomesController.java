@@ -66,16 +66,29 @@ public class IncomesController {
     @PutMapping
     @Transactional
     public void updateIncomes(@RequestBody @Valid UpdateIncomeData data) throws DuplicatedCommentException {
+        Long id = data.id();
+        Optional<Income> optionalIncome = repository.findById(id);
+        if (optionalIncome.isPresent()) {
+            Income income = optionalIncome.get();
 
-        income = repository.getReferenceById(data.id());
-        comments = data.comments();
-        date = data.date();
+            comments = data.comments();
+            date = data.date();
 
-        if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date)) {
-            throw new DuplicatedCommentException();
+            boolean isDuplicated = verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments, date);
+
+            if (isDuplicated && !comments.equals(income.getComments())) {
+                throw new DuplicatedCommentException();
+            }
+            income.updateData(data);
+        } else {
+            throw new IllegalArgumentException("Receita não encontrada");
         }
-        income.updateData(data);
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void deleteIncome(@PathVariable Long id){
+        repository.deleteById(id);
+    }
 }
 

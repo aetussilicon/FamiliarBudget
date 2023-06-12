@@ -2,6 +2,7 @@ package com.budget.budgetAPI.controller;
 
 import com.budget.budgetAPI.exceptions.DuplicatedCommentException;
 import com.budget.budgetAPI.functions.VerifyIfCommentIsDuplicated;
+import com.budget.budgetAPI.income.Income;
 import com.budget.budgetAPI.outgoing.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,24 +54,31 @@ public class OutgoingsController {
 
     @PutMapping
     @Transactional
-    public void updateOutgoings(@RequestBody @Valid UpdateOutgoingData data) throws IllegalArgumentException {
+    public void updateOutgoings(@RequestBody @Valid UpdateOutgoingData data) throws IllegalArgumentException, DuplicatedCommentException {
         Long id = data.id();
-        Optional<Outgoing> optionalOutgoing = Optional.of(outgoingsRepository.getReferenceById(id));
-        if (optionalOutgoing.isPresent()) {
-            outgoing = optionalOutgoing.get();
-            {
-                comments = data.comments();
-                date = data.date();
+        Optional<Outgoing> optionalOutgoing = outgoingsRepository.findById(id);
+        if(optionalOutgoing.isPresent()) {
+            Outgoing outgoing = optionalOutgoing.get();
 
-                if (verifyIfCommentIsDuplicated.verifyIfIsDuplicateOutgoing(comments, date) &&
-                        !comments.equals(outgoing.getComments())) {
-                    throw new IllegalArgumentException("Comentário duplicado");
-                }
-                outgoing.updateData(data);
+            comments = data.comments();
+            date = data.date();
 
+            boolean isDuplicated = verifyIfCommentIsDuplicated.verifyIfIsDuplicateIncome(comments,date);
+
+            if(isDuplicated && !comments.equals(outgoing.getComments())){
+                throw new DuplicatedCommentException();
             }
+            outgoing.updateData(data);
+        } else {
+            throw new IllegalArgumentException("Despesa não encontrada");
         }
 
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void deleteOutgoing(@PathVariable Long id){
+        outgoingsRepository.deleteById(id);
     }
 
 }
